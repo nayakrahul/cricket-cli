@@ -52,16 +52,19 @@ def currentMatches():
 
 def getScore(input):
 	uniqueIds = allMatches()[1]
-	uniqueId = uniqueIds[input-1]
-	url = "http://cricapi.com/api/cricketScore?{}"
-	args.update({'unique_id':uniqueId})
-	data = getResponse(args, url)
-	statements = []
-	statements.append([data['team-1'] + ' vs ' + data['team-2']])
-	statements.append([data['type']])
-	statements.append([data['score']])
-	statements.append([data['innings-requirement']])
-	makeTable(statements)
+	try:
+		uniqueId = uniqueIds[input-1]
+		url = "http://cricapi.com/api/cricketScore?{}"
+		args.update({'unique_id':uniqueId})
+		data = getResponse(args, url)
+		statements = []
+		statements.append([data['team-1'] + ' vs ' + data['team-2']])
+		statements.append([data['type']])
+		statements.append([data['score']])
+		statements.append([data['innings-requirement']])
+		makeTable(statements)
+	except (KeyError, ValueError, IndexError):
+		print "Invalid Input"
 
 def matchCalendar():
 	url = "http://cricapi.com/api/matchCalendar?{}"
@@ -75,64 +78,70 @@ def matchCalendar():
 
 def matchDetails(input):
 	uniqueIds = allMatches()[1]
-	uniqueId = uniqueIds[input-1]
-	url = "http://cricapi.com/api/ballByBall?{}"
-	args.update({'unique_id':uniqueId})
-	data = getResponse(args, url)
-	for datum in data['data']:
-		statements = []
-		summary = ""
-		if datum.get('over_complete'):
-			teamName = data['team'][0]['team_name'] \
-						if data['team'][0]['team_id'] == datum['team_id'] else data['team'][1]['team_name']
-			summary += "End of over %s (%s) %s %s/%s\n" % \
-						(datum['over_number'], datum['event_string'], teamName, datum['runs'], datum['wickets'])
-			if datum['required_string'] != "":
-				summary += "(%s)\n" % (datum['required_string'])
-			for batsman in datum['batsman']:
-				batsmanName = getPlayerName(batsman['pid'])
-				words = batsmanName.split()
-				lastName = words.pop()
-				acronym = "".join(w[0] for w in words)
-				summary += "%s %s 	%s (%sb %s*4 %s*6)\n" % \
-							(acronym, lastName, batsman['runs'], batsman['balls_faced'], batsman['fours'], batsman['sixes'])
-			for bowler in datum['bowler']:
-				batsmanName = getPlayerName(bowler['pid'])
-				words = batsmanName.split()
-				lastName = words.pop()
-				acronym = "".join(w[0] for w in words)
-				summary += "%s %s 	%s-%s-%s-%s" % \
-							(acronym, lastName, bowler['overs'].split('.')[0], bowler['maidens'], bowler['conceded'], bowler['wickets'])
-				break
-		statements.append([summary])
-		balls = []
-		for ball in datum['ball']:
-			ball_description = "%s 	%s, %s, %s" % (ball['overs_actual'], ball['players'], ball['event'], ball['text'])
-			balls.append([ball_description])
-		statements += balls
-		makeTable(statements)
+	try:
+		uniqueId = uniqueIds[input-1]
+		url = "http://cricapi.com/api/ballByBall?{}"
+		args.update({'unique_id':uniqueId})
+		data = getResponse(args, url)
+		for datum in data['data']:
+			statements = []
+			summary = ""
+			if datum.get('over_complete'):
+				teamName = data['team'][0]['team_name'] \
+							if data['team'][0]['team_id'] == datum['team_id'] else data['team'][1]['team_name']
+				summary += "End of over %s (%s) %s %s/%s\n" % \
+							(datum['over_number'], datum['event_string'], teamName, datum['runs'], datum['wickets'])
+				if datum['required_string'] != "":
+					summary += "(%s)\n" % (datum['required_string'])
+				for batsman in datum['batsman']:
+					batsmanName = getPlayerName(batsman['pid'])
+					words = batsmanName.split()
+					lastName = words.pop()
+					acronym = "".join(w[0] for w in words)
+					summary += "%s %s 	%s (%sb %s*4 %s*6)\n" % \
+								(acronym, lastName, batsman['runs'], batsman['balls_faced'], batsman['fours'], batsman['sixes'])
+				for bowler in datum['bowler']:
+					batsmanName = getPlayerName(bowler['pid'])
+					words = batsmanName.split()
+					lastName = words.pop()
+					acronym = "".join(w[0] for w in words)
+					summary += "%s %s 	%s-%s-%s-%s" % \
+								(acronym, lastName, bowler['overs'].split('.')[0], bowler['maidens'], bowler['conceded'], bowler['wickets'])
+					break
+			statements.append([summary])
+			balls = []
+			for ball in datum['ball']:
+				ball_description = "%s 	%s, %s, %s" % (ball['overs_actual'], ball['players'], ball['event'], ball['text'])
+				balls.append([ball_description])
+			statements += balls
+			makeTable(statements)
+	except (KeyError, ValueError, IndexError):
+		print "Invalid Input"
 
 def getPlayingXI(input):
 	uniqueIds = allMatches()[1]
-	uniqueId = uniqueIds[input-1]
-	url = "http://cricapi.com/api/ballByBall?{}"
-	args.update({'unique_id':uniqueId})
-	data = getResponse(args, url)
-	statements = [[data['team'][0]['team_name'], data['team'][1]['team_name']]]
-	for i in range(11):
-		players = [data['team'][0]['player'][i]['known_as'], data['team'][1]['player'][i]['known_as']]
-		statements.append(players)
-	makeTable(statements)
+	try:
+		uniqueId = uniqueIds[input-1]
+		url = "http://cricapi.com/api/ballByBall?{}"
+		args.update({'unique_id':uniqueId})
+		data = getResponse(args, url)
+		statements = [[data['team'][0]['team_name'], data['team'][1]['team_name']]]
+		for i in range(11):
+			players = [data['team'][0]['player'][i]['known_as'], data['team'][1]['player'][i]['known_as']]
+			statements.append(players)
+		makeTable(statements)
+	except (KeyError, ValueError, IndexError):
+		print "Invalid Input"
 
 def main(argv):
    	try:
    		opts, args = getopt.getopt(argv,"hams:cd:p:",["match=","score="])
    	except getopt.GetoptError:
-   		print 'Usage: cricket.py [-a] [-m] [-s <match_no>] [-c] [-d <match_no>] [-p <match_no>]'
+   		print 'Usage: cricket [-a] [-m] [-s <match_no>] [-c] [-d <match_no>] [-p <match_no>]'
    		sys.exit(2)
    	for opt, arg in opts:
    		if opt == '-h':
-   			print 'Usage: cricket.py [-a] [-m] [-s <match_no>] [-c] [-d <match_no>] [-p <match_no>]'
+   			print 'Usage: cricket [-a] [-m] [-s <match_no>] [-c] [-d <match_no>] [-p <match_no>]'
    			sys.exit()
    		elif opt == '-a':
    			makeTable(allMatches()[0])
