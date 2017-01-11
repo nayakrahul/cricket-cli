@@ -19,7 +19,10 @@ def getPlayerName(pid):
 	url = "http://cricapi.com/api/playerStats?{}"
 	args.update({'pid':pid})
 	data = getResponse(args, url)
-	return data['fullName']
+	if data.get('fullName'):
+		return data['fullName']
+	else:
+		return "Unknown"
 
 def allMatches():
 	url = "http://cricapi.com/api/matches?{}"
@@ -101,8 +104,8 @@ def matchDetails(input):
 					summary += "%s %s 	%s (%sb %s*4 %s*6)\n" % \
 								(acronym, lastName, batsman['runs'], batsman['balls_faced'], batsman['fours'], batsman['sixes'])
 				for bowler in datum['bowler']:
-					batsmanName = getPlayerName(bowler['pid'])
-					words = batsmanName.split()
+					bowlerName = getPlayerName(bowler['pid'])
+					words = bowlerName.split()
 					lastName = words.pop()
 					acronym = "".join(w[0] for w in words)
 					summary += "%s %s 	%s-%s-%s-%s" % \
