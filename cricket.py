@@ -138,7 +138,7 @@ def getPlayingXI(input):
 
 def main(argv):
    	try:
-   		opts, args = getopt.getopt(argv,"hams:cd:p:",["match=","score="])
+   		opts, args = getopt.getopt(argv,"hams:cd:p:",["score=", "details=", "playingxi="])
    	except getopt.GetoptError:
    		print 'Usage: cricket [-a] [-m] [-s <match_no>] [-c] [-d <match_no>] [-p <match_no>]'
    		sys.exit(2)
@@ -148,12 +148,12 @@ def main(argv):
    			sys.exit()
    		elif opt == '-a':
    			makeTable(allMatches()[0])
-   		elif opt in ("-m", "--match"):
+   		elif opt in ("-m"):
    			currentMatches()    
    		elif opt in ("-s", "--score"):
    			input = arg
    			getScore(int(input))
-   		elif opt in ("-c", "--calender"):
+   		elif opt in ("-c"):
    			matchCalendar()
    		elif opt in ("-d", "--details"):
    			input = arg
