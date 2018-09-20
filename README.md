@@ -6,5 +6,5 @@ Command to run:
 
 To make it a cli command, `setup.sh` can be used.
 
-#Dependencies
+# Dependencies
 `pip install texttable`
