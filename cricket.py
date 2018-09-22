@@ -4,9 +4,11 @@ import json
 import sys
 import getopt
 from texttable import Texttable
+from halo import Halo
 
 
 args = {'apikey': 'vkYYojXc77f2PxnpDaAcmucLSX12'}
+spinner = Halo(text='Loading', spinner='dots')
 USAGE = "Usage: cricket [-a] [-m] [-s <match_no>] [-c] [-d <match_no>] [-p <match_no>] [-x <player_name>]\n \
         -a --> All matches\n \
         -m --> Current matches\n \
@@ -19,10 +21,13 @@ BASE_URL = "http://cricapi.com/api/"
 
 
 def getResponse(args, url):
+    spinner.start()
     url = url.format(urllib.parse.urlencode(args))
     response = urllib.request.urlopen(url)
     data = json.loads(response.read())
     # print(data)
+    spinner.stop()
+    spinner.succeed("Success")
     return data
 
 
