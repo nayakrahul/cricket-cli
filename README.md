@@ -25,3 +25,5 @@ To make it a cli command, `setup.sh` can be used.
 `pip install halo`
 
 > After some days, API key may be outdated. In such case, get a refreshed one from http://www.cricapi.com .
+
+<img src="cricket-cli.gif" width="5000">
