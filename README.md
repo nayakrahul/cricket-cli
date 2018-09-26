@@ -23,6 +23,7 @@ To make it a cli command, `setup.sh` can be used.
 
 ### Dependencies
 `pip install texttable`
+
 `pip install halo`
 
 > After some days, API key may be outdated. In such case, get a refreshed one from http://www.cricapi.com .
