@@ -3,6 +3,7 @@ Displays matches, scores, summary, calender, playing XI and player stats on term
 
 ### Command to run:
 ```python cricket.py [-a] [-m] [-s <match_no>] [-c] [-d <match_no>] [-p <match_no>] [-x <player_name>]```
+
 -a --> All matches
 
 -m --> Current matches
