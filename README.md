@@ -16,7 +16,7 @@ Displays matches, scores, summary, calender, playing XI and player stats on term
 
 -p --> PlayingXI of a match
 
--x --> Player Statis
+-x --> Player statistics
 
 
 To make it a cli command, `setup.sh` can be used.
